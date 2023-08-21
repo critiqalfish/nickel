@@ -17,11 +17,16 @@ typedef enum {
 } TokenType;
 
 typedef struct {
-    TokenType *tokens;
+    TokenType type;
+    const char* value;
+} Token;
+
+typedef struct {
+    Token *tokens;
     size_t used;
     size_t size;
 } TokenBox;
 
 void initTokenBox(TokenBox *tb);
-void insertToken(TokenBox *tb, TokenType element);
+void insertToken(TokenBox *tb, Token token);
 void freeTokenBox(TokenBox *tb);

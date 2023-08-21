@@ -2,6 +2,8 @@
 #include "common.h"
 #include "lexer.h"
 
+#define DEBUG 1
+
 int main(int argc, char* argv[]) {
     printf("Nickel v0\n");
     if (argc != 2) {
@@ -22,6 +24,20 @@ int main(int argc, char* argv[]) {
     initTokenBox(&tb);
 
     int lexStatus = lex(&tb, source);
+    if (lexStatus) {
+        printf("Lexer encountered an error!\n");
+        return 1;
+    }
+
+    #if DEBUG
+    printf("\ntokens: %zu\n", tb.used);
+    for (int i = 0; i < tb.used; i++) {
+        printf("token %d: type %d, value: %s\n", i, tb.tokens[i].type, tb.tokens[i].value);
+    }
+    printf("\n");
+    #endif
+
+    printf("Lexing was successful!\n");
 
     freeTokenBox(&tb);
     fclose(source);
