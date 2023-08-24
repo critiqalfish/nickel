@@ -70,7 +70,7 @@ static int eatTokens(Lexer *lx, TokenBox *tb) {
         else if (lx->sourceContent[lx->location] == '"') {
             int start = lx->location;
             lx->location++;
-            while (lx->location < lx->fileSize && lx->sourceContent[lx->location] != '"') {
+            while (lx->location < lx->fileSize && lx->sourceContent[lx->location] != '"' || lx->sourceContent[lx->location] == '"' && lx->sourceContent[lx->location - 1] == '\\') {
                 lx->location++;
             }
             if (lx->location < lx->fileSize && lx->sourceContent[lx->location] == '"') {

@@ -24,10 +24,6 @@ int main(int argc, char* argv[]) {
     initTokenBox(&tb);
 
     int lexStatus = lex(&tb, source);
-    if (lexStatus) {
-        printf("Lexer encountered an error!\n");
-        return 1;
-    }
 
     #if DEBUG
     printf("\ntokens: %zu\n", tb.used);
@@ -36,6 +32,11 @@ int main(int argc, char* argv[]) {
     }
     printf("\n");
     #endif
+
+    if (lexStatus) {
+        printf("Lexer encountered an error!\n");
+        return 1;
+    }
 
     printf("Lexing was successful!\n");
 
