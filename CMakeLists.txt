@@ -9,6 +9,8 @@ set(SOURCES
     src/common.h
     src/lexer.c
     src/lexer.h
+    src/parser.c
+    src/parser.h
 )
 
 add_executable(nickel ${SOURCES})

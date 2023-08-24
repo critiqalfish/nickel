@@ -5,20 +5,19 @@ typedef enum {
     tINT,
     tINTLIT,
     tFUNCTIONARROW,
-    tMAIN,
     tLPAREN,
     tRPAREN,
     tLBRACE,
     tRBRACE,
     tIDENTIFIER,
+    tSTATEMENT,
     tSTRINGLIT,
-    tSEMICOL,
-    tBACK
+    tSEMICOL
 } TokenType;
 
 typedef struct {
     TokenType type;
-    const char* value;
+    const char *value;
 } Token;
 
 typedef struct {

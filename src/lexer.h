@@ -10,5 +10,5 @@ typedef struct {
 
 int lex(TokenBox *tb, FILE *source);
 static int eatTokens(Lexer *lx, TokenBox *tb);
-static int lookAheadChars(Lexer *lx, const char* chars);
+static int lookAheadChars(Lexer *lx, const char *chars);
 static void readWholeFile(Lexer *lx, FILE *source);

@@ -52,27 +52,19 @@ static int eatTokens(Lexer *lx, TokenBox *tb) {
             insertToken(tb, token);
             lx->location++;
         }
-        else if (!lookAheadChars(lx, "main ")) {
-            Token token = {tMAIN};
-            insertToken(tb, token);
-            lx->location += 5;
-        }
-        else if (!lookAheadChars(lx, "back ")) {
-            Token token = {tBACK};
-            insertToken(tb, token);
-            lx->location += 5;
-        }
-        else if (!lookAheadChars(lx, "int ")) {
+        else if (!lookAheadChars(lx, "int")) {
             Token token = {tINT};
             insertToken(tb, token);
-            lx->location += 4;
+            lx->location += 3;
         }
         else if (lx->sourceContent[lx->location] == '"') {
-            int start = lx->location;
+            long start = lx->location;
             lx->location++;
+
             while (lx->location < lx->fileSize && lx->sourceContent[lx->location] != '"' || lx->sourceContent[lx->location] == '"' && lx->sourceContent[lx->location - 1] == '\\') {
                 lx->location++;
             }
+
             if (lx->location < lx->fileSize && lx->sourceContent[lx->location] == '"') {
                 Token token = {tSTRINGLIT};
                 token.value = strndup(&lx->sourceContent[start], lx->location - start + 1);
@@ -84,16 +76,31 @@ static int eatTokens(Lexer *lx, TokenBox *tb) {
             }
         }
         else if (isdigit(lx->sourceContent[lx->location])) {
-            int start = lx->location;
+            long start = lx->location;
+
             while (lx->location < lx->fileSize && isdigit(lx->sourceContent[lx->location])) {
                 lx->location++;
             }
-            char intLiteral[69];
-            strncpy(intLiteral, &lx->sourceContent[start], lx->location - start);
-            intLiteral[lx->location - start] = '\0';
             
             Token token = {tINTLIT};
-            token.value = strdup(intLiteral);
+            token.value = strndup(&lx->sourceContent[start], lx->location - start);
+            insertToken(tb, token);
+        }
+        else if (isalpha(lx->sourceContent[lx->location])) {
+            long start = lx->location;
+
+            while (lx->location < lx->fileSize && isalpha(lx->sourceContent[lx->location])) {
+                lx->location++;
+            }
+
+            Token token = {};
+            token.value = strndup(&lx->sourceContent[start], lx->location - start);
+            if (strcmp(token.value, "main") == 0 || strcmp(token.value, "back") == 0) {
+                token.type = tSTATEMENT;
+            }
+            else {
+                token.type = tIDENTIFIER;
+            }
             insertToken(tb, token);
         }
         else {
@@ -105,9 +112,11 @@ static int eatTokens(Lexer *lx, TokenBox *tb) {
 
 static int lookAheadChars(Lexer *lx, const char* chars) {
     int length = strlen(chars);
+
     if (lx->location + length - 1 > lx->fileSize) {
         return 1;
     }
+
     for (long i = 0; i < length; i++) {
         if (lx->sourceContent[lx->location + i] != chars[i]) {
             return 1;
