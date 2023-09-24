@@ -41,5 +41,5 @@ typedef struct TreeNode {
 int parse(TreeNode *pt, TokenBox *tb);
 TreeNode *createNode(NodeType type);
 void addChildNode(TreeNode *parent, TreeNode *child);
-int getNested(TokenBox *tb, long location);
+long getNested(TokenBox *tb, long location);
 void parseFunctionBody(TokenBox *tb, long location);

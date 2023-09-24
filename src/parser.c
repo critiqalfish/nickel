@@ -77,11 +77,11 @@ void addChildNode(TreeNode *parent, TreeNode *child) {
     parent->children[parent->childrenCount - 1] = child;
 }
 
-int getNested(TokenBox *tb, long location) {
+long getNested(TokenBox *tb, long location) {
     int nestingLevel = 0;
     long startNest = location;
     long endNest = -1;
-    
+
     TokenType left = tb->tokens[location].type;
     TokenType right;
     if (left == tLPAREN) right = tRPAREN;
