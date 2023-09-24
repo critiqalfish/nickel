@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(nickel)
 
-include_directories(src)
+set(CMAKE_BUILD_TYPE Debug)
 
 set(SOURCES
     src/main.c

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "common.h"
 #include "lexer.h"
 #include "parser.h"
@@ -40,9 +41,13 @@ int main(int argc, char *argv[]) {
 
     // PARSING
     printf("Growing an abstract syntax tree...\n");
-    int parseStatus = parse(&tb);
+    TreeNode pt;
+    int parseStatus = parse(&pt, &tb);
+    #if DEBUG
+    //printf("\n%d\n", pt.children[0]->type);
+    #endif
     if (parseStatus) {
-        printf("Lexer encountered an error!\n");
+        printf("Parser encountered an error!\n");
         return 1;
     }
     printf("Parsing was successful!\n");

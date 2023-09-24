@@ -1,5 +1,6 @@
 #pragma once
 #include "common.h"
+#include <stddef.h>
 
 typedef enum {
     sBACK
@@ -22,12 +23,23 @@ typedef struct TreeNode {
         struct {
             const char *name;
             struct TreeNode *params;
+            struct TreeNode *body;
+        } functionDec;
+        struct {
+            const char *name;
+            struct TreeNode *params;
         } functionCal;
         struct {
             StatementType type;
             struct TreeNode *children;
         } statement;
     } node;
+    struct TreeNode **children;
+    size_t childrenCount;
 } TreeNode;
 
-int parse(TokenBox *tb);
+int parse(TreeNode *pt, TokenBox *tb);
+TreeNode *createNode(NodeType type);
+void addChildNode(TreeNode *parent, TreeNode *child);
+int getNested(TokenBox *tb, long location);
+void parseFunctionBody(TokenBox *tb, long location);

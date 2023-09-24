@@ -32,3 +32,8 @@ void freeTokenBox(TokenBox *tb) {
     tb->tokens = NULL;
     tb->used = tb->size = 0;
 }
+
+int checkBounds(int length, int iteration, int ahead) {
+    if (iteration + ahead < length) return 1;
+    else return 0;
+}

@@ -10,7 +10,7 @@ typedef enum {
     tLBRACE,
     tRBRACE,
     tIDENTIFIER,
-    tSTATEMENT,
+    tKEYWORD,
     tSTRINGLIT,
     tSEMICOL
 } TokenType;
@@ -29,3 +29,4 @@ typedef struct {
 void initTokenBox(TokenBox *tb);
 void insertToken(TokenBox *tb, Token token);
 void freeTokenBox(TokenBox *tb);
+int checkBounds(int length, int iteration, int ahead);

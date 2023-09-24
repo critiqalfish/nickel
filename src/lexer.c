@@ -96,7 +96,7 @@ static int eatTokens(Lexer *lx, TokenBox *tb) {
             Token token = {};
             token.value = strndup(&lx->sourceContent[start], lx->location - start);
             if (strcmp(token.value, "main") == 0 || strcmp(token.value, "back") == 0) {
-                token.type = tSTATEMENT;
+                token.type = tKEYWORD;
             }
             else {
                 token.type = tIDENTIFIER;
