@@ -3,16 +3,34 @@
 #include <stddef.h>
 
 typedef enum {
-    sBACK
-} StatementType;
+    kBACK
+} KeywordType;
+
+typedef enum {
+    oPLUS,
+    oMINUS,
+    oMULT,
+    oDIV
+} OperatorType;
 
 typedef enum {
     nPROGRAM,
     nFUNCTIONMAIN,
     nFUNCTIONDEC,
     nFUNCTIONCAL,
-    nSTATEMENT
+    nLINE,
+    nSTATEMENT,
+    nKEYWORD,
+    nOPERAND,
+    nOPERATOR
 } NodeType;
+
+struct opPrecedence {
+    struct {
+        int left;
+        int right;
+    } plus, minus, mult, div;
+};
 
 typedef struct TreeNode {
     NodeType type;
@@ -30,9 +48,14 @@ typedef struct TreeNode {
             struct TreeNode *params;
         } functionCal;
         struct {
-            StatementType type;
-            struct TreeNode *children;
-        } statement;
+            KeywordType type;
+        } keyword;
+        struct {
+            const char *value;
+        } operand;
+        struct {
+            OperatorType type;
+        } operator_;
     } node;
     struct TreeNode **children;
     size_t childrenCount;
@@ -42,4 +65,6 @@ int parse(TreeNode *pt, TokenBox *tb);
 TreeNode *createNode(NodeType type);
 void addChildNode(TreeNode *parent, TreeNode *child);
 long getNested(TokenBox *tb, long location);
-void parseFunctionBody(TokenBox *tb, long location);
+void parseFunctionBody(TreeNode *func, TokenBox *tb, long location, long nestEnd);
+void parseLine(TreeNode *line, TokenBox *tb, long lineStart, long lineEnd);
+TreeNode *parseExpression(TokenBox *tb, long expStart, long expEnd, int precedence);

@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     TreeNode pt;
     int parseStatus = parse(&pt, &tb);
     #if DEBUG
-    //printf("\n%d\n", pt.children[0]->type);
+    printf("\n%d\n\n", pt.children[0]->type);
     #endif
     if (parseStatus) {
         printf("Parser encountered an error!\n");

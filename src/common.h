@@ -12,7 +12,11 @@ typedef enum {
     tIDENTIFIER,
     tKEYWORD,
     tSTRINGLIT,
-    tSEMICOL
+    tSEMICOL,
+    tPLUS,
+    tMINUS,
+    tASTER,
+    tDIV
 } TokenType;
 
 typedef struct {

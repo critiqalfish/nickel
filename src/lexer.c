@@ -52,6 +52,26 @@ static int eatTokens(Lexer *lx, TokenBox *tb) {
             insertToken(tb, token);
             lx->location++;
         }
+        else if (lx->sourceContent[lx->location] == '+') {
+            Token token = {tPLUS};
+            insertToken(tb, token);
+            lx->location++;
+        }
+        else if (lx->sourceContent[lx->location] == '-') {
+            Token token = {tMINUS};
+            insertToken(tb, token);
+            lx->location++;
+        }
+        else if (lx->sourceContent[lx->location] == '*') {
+            Token token = {tASTER};
+            insertToken(tb, token);
+            lx->location++;
+        }
+        else if (lx->sourceContent[lx->location] == '/') {
+            Token token = {tDIV};
+            insertToken(tb, token);
+            lx->location++;
+        }
         else if (!lookAheadChars(lx, "int")) {
             Token token = {tINT};
             insertToken(tb, token);

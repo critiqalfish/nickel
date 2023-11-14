@@ -1,5 +1,5 @@
 int <- main () {
     print("Hello,\" Nickel!");
 
-    back(0);
+    back(1 + 1 - 1 * 1 / 1);
 }
