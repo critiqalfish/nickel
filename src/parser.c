@@ -119,9 +119,10 @@ void parseFunctionBody(TreeNode *func, TokenBox *tb, long location, long nestEnd
         long lineSize = 0;
         do {
             lineSize++;
-        } while (lineSize < nestEnd && loc < nestEnd && tb->tokens[location].type != tSEMICOL);
+            loc++;
+        } while (loc < nestEnd && tb->tokens[loc].type != tSEMICOL);
         TreeNode *line = createNode(nLINE);
-        parseLine(line, tb, loc, loc + lineSize);
+        parseLine(line, tb, loc - lineSize, loc + lineSize);
         addChildNode(func, line);
         loc++;
     }
@@ -145,7 +146,7 @@ void parseLine(TreeNode *line, TokenBox *tb, long lineStart, long lineEnd) {
                 if (checkBounds(lineEnd, loc, 0) && tb->tokens[loc].type == tLPAREN) {
                     long expEnd = getNested(tb, loc);
                     loc++;
-                    addChildNode(keyword, parseExpression(tb, loc, expEnd, 0));
+                    addChildNode(keyword, parseExpression(tb, loc, expEnd - 1, 0));
                     addChildNode(line, keyword);
                 }
             }
@@ -173,11 +174,11 @@ TreeNode *parseExpression(TokenBox *tb, long expStart, long expEnd, int preceden
         if (!checkBounds(expEnd, loc, 1)) {
             break;
         }
-        loc++;
+        loc += 2;
 
         OperatorType op;
         int l, r;
-        switch (tb->tokens[loc].type) {
+        switch (tb->tokens[loc - 1].type) {
             case tPLUS:
                 op = oPLUS;
                 l = opPrecedence.plus.left;
@@ -202,11 +203,13 @@ TreeNode *parseExpression(TokenBox *tb, long expStart, long expEnd, int preceden
                 break;
         }
 
-        if (l < precedence) {
+        printf("loc: %ld l: %d r: %d precedence: %d operator: %d\n",loc, l, r, precedence, op);
+        if (l < precedence || ((loc == expEnd || loc + 2 == expEnd) && precedence == 0)) {
+            printf("true\n");
             break;
         }
 
-        TreeNode *right = parseExpression(tb, loc + 1, expEnd, r); // MAYBE SEGFAULT 🗿🗿🗿 (gigachad) (because the + 2)
+        TreeNode *right = parseExpression(tb, loc, expEnd, r); // MAYBE SEGFAULT 🗿🗿🗿 (gigachad) (because the + 2)
         TreeNode *opNode = createNode(nOPERATOR);
         opNode->node.operator_.type = op;
         addChildNode(opNode, left);

@@ -6,6 +6,70 @@
 
 #define DEBUG 1
 
+void printAST(TreeNode *node, int level) {
+    if (node == NULL) {
+        return;
+    }
+
+    for (int i = 0; i < level; i++) {
+        printf("  ");
+    }
+
+    switch (node->type) {
+        case nPROGRAM:
+            printf("PROGRAM\n");
+            break;
+        case nFUNCTIONMAIN:
+            printf("FUNCTION MAIN -> %zu\n", node->childrenCount);
+            break;
+        case nFUNCTIONDEC:
+            printf("FUNCTION DECL\n");
+            break;
+        case nFUNCTIONCAL:
+            printf("FUNCTION CALL\n");
+            break;
+        case nLINE:
+            printf("LINE -> %zu\n", node->childrenCount);
+            break;
+        case nSTATEMENT:
+            printf("STATEMENT\n");
+            break;
+        case nKEYWORD:
+            printf("KEYWORD\n");
+            break;
+        case nOPERAND:
+            printf("OPERAND %s\n", node->node.operand.value);
+            break;
+        case nOPERATOR:
+            printf("OPERATOR");
+            switch (node->node.operator_.type) {
+                case oPLUS:
+                    printf(" +\n");
+                    break;
+                case oMINUS:
+                    printf(" -\n");
+                    break;
+                case oMULT:
+                    printf(" *\n");
+                    break;
+                case oDIV:
+                    printf(" /\n");
+                    break;
+                default:
+                    printf("\n");
+            }
+            break;
+        default:
+            printf("Unknown NodeType\n");
+    }
+
+    for (size_t i = 0; i < node->childrenCount; i++) {
+        if (node->children != NULL) {
+            printAST(node->children[i], level + 1);
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     // ARGUMENTS
     printf("Nickel v0\n");
@@ -44,7 +108,9 @@ int main(int argc, char *argv[]) {
     TreeNode pt;
     int parseStatus = parse(&pt, &tb);
     #if DEBUG
-    printf("\n%d\n\n", pt.children[0]->type);
+    printf("\n");
+    printAST(&pt, 0);
+    printf("\n");
     #endif
     if (parseStatus) {
         printf("Parser encountered an error!\n");
